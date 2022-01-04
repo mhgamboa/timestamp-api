@@ -22,18 +22,21 @@ app.get("/", function (req, res) {
 app.get("/api/:date", function (req, res) {
   let { date } = req.params;
 
-  if (!Date.parse(date)) return res.json({ error: "Invalid Date" });
-
   if (Number(date)) {
+    console.log("unix");
     const utc = new Date(Number(date));
 
     return res.json({ unix: Number(date), utc });
+  } else if (new Date(date) != "Invalid Date") {
+    console.log("valid date");
+    return res.json({ unix: Date.parse(date), utc: new Date(date) });
   }
+  console.log("error");
 
-  return res.json({ unix: Date.parse(date), utc: new Date(date) });
+  return res.json({ error: "Invalid Date" });
 });
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(/*process.env.PORT*/ 57946, function () {
   console.log("Your app is listening on port " + listener.address().port);
 });
